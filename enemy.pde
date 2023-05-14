@@ -25,7 +25,7 @@ class Enemy{
     fill(#4467CB);
     rect(xPos, yPos, 50, 50);
   }
-  
+
   void move(){
     if(firstPos ==  0){
       xPos = xPos + speed;

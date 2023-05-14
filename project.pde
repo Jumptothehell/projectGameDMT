@@ -4,6 +4,8 @@ int [] x = {0, 1080};
 Enemy enemy1;
 ArrayList <Enemy> enemies; //store enemies
 ArrayList <Bomb> bombs; //store bombs
+int maxEnemiesPerScreen = 5;
+int EnemiesIndex = 0;
 
 int spawnDelay = 1000;
 int lastSpawnTime = 0;
@@ -41,6 +43,9 @@ void draw(){
 
     if (bomb.isOffscreen()) {
       bombs.remove(i);
+    }else if(bomb.checkHitPlayer(player1)){
+      bombs.remove(i);
+      println("Player hit by bomb"); //change this to go game over interface
     }
   }
     
@@ -54,11 +59,19 @@ void mousePressed(){
 }
 
 void spawnEnemy() {
-  int rndX = int(random(2));
-  float firstPos = x[rndX];
-  float xPos = firstPos;
-  Enemy enemy1 = new Enemy(firstPos, xPos);
-  enemies.add(enemy1);
+  if(enemies.size() < maxEnemiesPerScreen){
+    int rndX = int(random(2));
+    float firstPos = x[rndX];
+    float xPos = firstPos;
+    Enemy enemy1 = new Enemy(firstPos, xPos);
+    enemies.add(enemy1);
+    EnemiesIndex++;
+  }
+
+  if(EnemiesIndex >= maxEnemiesPerScreen){
+    EnemiesIndex = 0;
+    lastSpawnTime = millis() + spawnDelay;
+  }
   
   for (int i = 0; i < enemies.size(); i ++){
     Enemy enemy = enemies.get(i);
@@ -66,7 +79,7 @@ void spawnEnemy() {
     float enemyX = enemy.xPos;
     float enemyY = enemy.yPos;
     
-    if(random(1) < 0.08){
+    if(random(1) < 0.05){
       Bomb bomb = new Bomb(enemyX, enemyY);
       bombs.add(bomb);
     }

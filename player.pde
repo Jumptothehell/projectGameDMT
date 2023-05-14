@@ -35,16 +35,40 @@ class players{
     DrawWheel2();
   }
   void DrawWheel1(){
-     wheel1PosX = posX-256*size/2-50*size;
-     wheel1PosY = posY-size*50*2;
+    wheel1PosX = posX-256*size/2-50*size;
+    wheel1PosY = posY-size*50*2;
     img = loadImage("pizza2.png");
-    image(img,wheel1PosX,wheel1PosY,100*size,100*size);
+    pushMatrix();
+    translate(wheel1PosX + 50 * size, wheel1PosY + 50 * size);
+    
+    if (posX < mouseX) {
+      // Player is moving to the right, rotate the wheel normally
+      rotate(theta);
+    } else {
+      // Player is moving to the left, rotate the wheel by adding PI to the rotation angle
+      rotate(theta + PI);
+    }
+    
+    image(img, -50 * size, -50 * size, 100 * size, 100 * size);
+    popMatrix();
   }
   void DrawWheel2(){
     wheel2PosX = posX+256*size/2-50*size;
     wheel2PosY = posY-size*50*2;
     img = loadImage("pizza2.png");
-    image(img,wheel2PosX,wheel2PosY,100*size,100*size);
+    pushMatrix();
+    translate(wheel2PosX + 50 * size, wheel2PosY + 50 * size);
+    
+    if (posX < mouseX) {
+      // Player is moving to the right, rotate the wheel normally
+      rotate(theta);
+    } else {
+      // Player is moving to the left, rotate the wheel by adding PI to the rotation angle
+      rotate(theta + PI);
+    }
+    
+    image(img, -50 * size, -50 * size, 100 * size, 100 * size);
+    popMatrix();
   }
   void DrawGun(){
     gunPosX = posX;
