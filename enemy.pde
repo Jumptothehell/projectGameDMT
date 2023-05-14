@@ -4,38 +4,39 @@ class enemy{
   float yPos;
   float speed;
   
-  enemy(){
-    firstPos = firstPositionSpawn();
-    xPos = randomPositionX();
+  enemy(float fp, float x){
+    firstPos = fp;
+    xPos = x;
     yPos = randomPositionY();
     speed = randomSpeed();
   }
   
-  int firstPositionSpawn(){
-    int [] x = {0, width};
-    int rndX = int(random(x.length));
-    int rndXFirstPosition = x[rndX];
-    return rndXFirstPosition;
-  }
+  //int firstPositionSpawn(){
+  //  int [] x = {0, width};
+  //  int rndX = int(random(x.length));
+  //  int rndXFirstPosition = x[rndX];
+  //  return rndXFirstPosition;
+  //}
   
-  int randomPositionX(){
-    int rndX =  firstPositionSpawn();
-    return rndX;
-  }
+  //int randomPositionX(){
+  //  int rndX =  firstPositionSpawn();
+  //  return rndX;
+  //}
   
   int randomPositionY(){
-    int rndY = int(random(40, 150));
+    int rndY = int(random(40, 240));
     return rndY;
   }
   
   float randomSpeed(){
-    float speed = random(1, 2);
+    float speed = random(7, 10);
     return speed;
   }
   
   void spawnEnemy(){
-    rectMode(CENTER);
-    rect(xPos, yPos, 30, 30);
+    //rectMode(CENTER);
+    fill(#4467CB);
+    rect(xPos, yPos, 50, 50);
   }
   
   void move(){
