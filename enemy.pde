@@ -46,4 +46,8 @@ class enemy{
       xPos = xPos + (speed * -1);
     }
   }
+  
+  boolean isOffscreen() {
+    return (xPos < 0 || xPos > width);
+  }
 }
