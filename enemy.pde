@@ -1,30 +1,18 @@
-class enemy{
+class Enemy{
   float firstPos;
   float xPos;
   float yPos;
   float speed;
   
-  enemy(float fp, float x){
+  Enemy(float fp, float x){
     firstPos = fp;
     xPos = x;
     yPos = randomPositionY();
     speed = randomSpeed();
   }
   
-  //int firstPositionSpawn(){
-  //  int [] x = {0, width};
-  //  int rndX = int(random(x.length));
-  //  int rndXFirstPosition = x[rndX];
-  //  return rndXFirstPosition;
-  //}
-  
-  //int randomPositionX(){
-  //  int rndX =  firstPositionSpawn();
-  //  return rndX;
-  //}
-  
   int randomPositionY(){
-    int rndY = int(random(40, 240));
+    int rndY = int(random(40, 120));
     return rndY;
   }
   
@@ -33,8 +21,7 @@ class enemy{
     return speed;
   }
   
-  void spawnEnemy(){
-    //rectMode(CENTER);
+  void displayEnemy(){
     fill(#4467CB);
     rect(xPos, yPos, 50, 50);
   }
@@ -42,12 +29,13 @@ class enemy{
   void move(){
     if(firstPos ==  0){
       xPos = xPos + speed;
-    }else{
+    }
+    else{
       xPos = xPos + (speed * -1);
     }
   }
   
-  boolean isOffscreen() {
+  boolean isEnemyOffscreen() {
     return (xPos < 0 || xPos > width);
   }
 }
