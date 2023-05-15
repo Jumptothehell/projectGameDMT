@@ -1,3 +1,6 @@
+boolean isStart = false, isEnd = false;
+// isEnd = false, make game over
+Interfaces startInterface1;
 players player1;
 
 int [] x = {0, 1080};
@@ -9,57 +12,69 @@ int EnemiesIndex = 0;
 
 int spawnDelay = 1000;
 int lastSpawnTime = 0;
-  
-void setup(){
-  size(1080,560);
-  player1 = new players(width/2,height,0.5,25);
-  
+
+void setup() {
+  size(1080, 560);
+  player1 = new players(width/2, height, 0.5, 25);
+  startInterface1 = new Interfaces();
+
   lastSpawnTime = millis();
   enemies = new ArrayList<Enemy>();
   bombs = new ArrayList<Bomb>();
 }
 
-void draw(){
+void draw() {
   background(255);
-  if(millis() - lastSpawnTime > spawnDelay){
-    spawnEnemy();
-    lastSpawnTime = millis();
-  }
-  
-  for (int i = enemies.size() - 1; i >= 0; i--){
-    Enemy enemy = enemies.get(i);
-    enemy.move();
-    enemy.displayEnemy();
-    
-    if (enemy.isEnemyOffscreen()) {
-      enemies.remove(i);
+  startInterface1.CreateInterface();
+  if (isStart == true && isEnd == false) {
+    if (millis() - lastSpawnTime > spawnDelay) {
+      spawnEnemy();
+      lastSpawnTime = millis();
     }
-  }
-  
-  for (int i = bombs.size() - 1; i >= 0; i--) {
-    Bomb bomb = bombs.get(i);
-    bomb.drawBomb();
-    bomb.dropBomb();
 
-    if (bomb.isOffscreen()) {
-      bombs.remove(i);
-    }else if(bomb.checkHitPlayer(player1)){
-      bombs.remove(i);
-      println("Player hit by bomb"); //change this to go game over interface
+    for (int i = enemies.size() - 1; i >= 0; i--) {
+      Enemy enemy = enemies.get(i);
+      enemy.move();
+      enemy.displayEnemy();
+
+      if (enemy.isEnemyOffscreen()) {
+        enemies.remove(i);
+      }
     }
+
+    for (int i = bombs.size() - 1; i >= 0; i--) {
+      Bomb bomb = bombs.get(i);
+      bomb.drawBomb();
+      bomb.dropBomb();
+
+      if (bomb.isOffscreen()) {
+        bombs.remove(i);
+      } else if (bomb.checkHitPlayer(player1)) {
+        bombs.remove(i);
+        println("Player hit by bomb"); //change this to go game over interface
+        isEnd = true;
+      }
+    }
+
+    player1.Draw();
+    player1.Move();
+    player1.UpdateBullet();
   }
-    
-  player1.Draw();
-  player1.Move();
-  player1.UpdateBullet();
+  if(isEnd == true)
+  {
+      startInterface1.EndScene();
+  }
 }
 
-void mousePressed(){
-  player1.GunFire();
+void mousePressed() {
+  startInterface1.StartButton();
+  if (isStart == true) {
+    player1.GunFire();
+  }
 }
 
 void spawnEnemy() {
-  if(enemies.size() < maxEnemiesPerScreen){
+  if (enemies.size() < maxEnemiesPerScreen) {
     int rndX = int(random(2));
     float firstPos = x[rndX];
     float xPos = firstPos;
@@ -68,18 +83,18 @@ void spawnEnemy() {
     EnemiesIndex++;
   }
 
-  if(EnemiesIndex >= maxEnemiesPerScreen){
+  if (EnemiesIndex >= maxEnemiesPerScreen) {
     EnemiesIndex = 0;
     lastSpawnTime = millis() + spawnDelay;
   }
-  
-  for (int i = 0; i < enemies.size(); i ++){
+
+  for (int i = 0; i < enemies.size(); i ++) {
     Enemy enemy = enemies.get(i);
-    
+
     float enemyX = enemy.xPos;
     float enemyY = enemy.yPos;
-    
-    if(random(1) < 0.05){
+
+    if (random(1) < 0.05) {
       Bomb bomb = new Bomb(enemyX, enemyY);
       bombs.add(bomb);
     }
