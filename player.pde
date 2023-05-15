@@ -1,117 +1,131 @@
-PImage img;
+class Player{
+  PImage img;
+  
+  int rectSize = 130;
+  int gunHeight = 80;
+  
+  float theta = 0;
+  float posX ,posY,upSpace;
+  float playerPosX, playerPosY, wheel1PosX,wheel1PosY, wheel2PosX,wheel2PosY;
+  float gunPosX, gunPosY;
+   
+  ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+   
+   Player (float x, float y, float u){
+     posX = x;
+     posY = y;
+     upSpace = u;
+   }
 
-class players{
- float theta = 0;
- float posX,posY,size,upSpace,
- playerPosX,playerPosY,
- wheel1PosX,wheel1PosY,
- wheel2PosX,wheel2PosY,
- gunPosX,gunPosY;
- ArrayList<Bullet> bullets = new ArrayList<Bullet>();
- players(float x,float y,float s,float u){
-   posX = x;
-   posY = y;
-   size = s;
-   upSpace = u;
- }
-
-//Draw
+  //Draw
   void Draw(){
     DrawPlayer();
     DrawWheel();
-    DrawGun();
+    Gun();
   }
+  
   void DrawPlayer(){
     fill(#055814);
-    playerPosX = posX-256*size/2;
-    playerPosY = posY-size*256-upSpace;
+    playerPosX = posX;
+    playerPosY = 465; 
+    
+    rectMode(CENTER);
+    rect(playerPosX, playerPosY, rectSize, rectSize);
+    
     img = loadImage("sleepRockyNoBG.png");
-    rect(playerPosX,playerPosY,256*size,256*size);
-    image(img,playerPosX,playerPosY,256*size,256*size);
-    
+    imageMode(CENTER);
+    image(img, playerPosX - 19, playerPosY + 10 , 170, 120);
   }
+  
   void DrawWheel(){
-    DrawWheel1();
-    DrawWheel2();
+    int wheelSize = 65;
+    DrawWheel1(wheelSize);
+    DrawWheel2(wheelSize);
   }
-  void DrawWheel1(){
-    wheel1PosX = posX-256*size/2-50*size;
-    wheel1PosY = posY-size*50*2;
+  void DrawWheel1(int size){
+    wheel1PosX = playerPosX  - rectSize / 2 ;
+    wheel1PosY = playerPosY + rectSize / 2 ;
     img = loadImage("pizza2.png");
-    pushMatrix();
-    translate(wheel1PosX + 50 * size, wheel1PosY + 50 * size);
-    
-    if (posX < mouseX) {
-      // Player is moving to the right, rotate the wheel normally
-      rotate(theta);
-    } else {
-      // Player is moving to the left, rotate the wheel by adding PI to the rotation angle
-      rotate(theta + PI);
-    }
-    
-    image(img, -50 * size, -50 * size, 100 * size, 100 * size);
-    popMatrix();
+      pushMatrix();
+      translate(wheel1PosX, wheel1PosY);
+      if(posX < mouseX){
+        rotate(theta);
+      }
+      else{
+        rotate(theta + PI);
+      }
+      image(img, 0, 0, size, size);
+      popMatrix();
   }
-  void DrawWheel2(){
-    wheel2PosX = posX+256*size/2-50*size;
-    wheel2PosY = posY-size*50*2;
+  void DrawWheel2(int size){
+    wheel2PosX = playerPosX  + rectSize / 2 ;
+    wheel2PosY = playerPosY + rectSize / 2 ;
     img = loadImage("pizza2.png");
-    pushMatrix();
-    translate(wheel2PosX + 50 * size, wheel2PosY + 50 * size);
-    
-    if (posX < mouseX) {
-      // Player is moving to the right, rotate the wheel normally
-      rotate(theta);
-    } else {
-      // Player is moving to the left, rotate the wheel by adding PI to the rotation angle
-      rotate(theta + PI);
-    }
-    
-    image(img, -50 * size, -50 * size, 100 * size, 100 * size);
-    popMatrix();
+      pushMatrix();
+      translate(wheel2PosX, wheel2PosY);
+      if(posX < mouseX){
+        rotate(theta);
+      }
+      else{
+        rotate(theta + PI);
+      }
+      image(img, 0, 0, size, size);
+      popMatrix();
   }
-  void DrawGun(){
-    gunPosX = posX;
-    gunPosY = posY-80*size-256*size;
+  void Gun(){
+    gunPosX = playerPosX;
+    gunPosY = playerPosY - rectSize / 2;
+      pushMatrix();
+      translate(gunPosX,gunPosY);
+      DrawGun();
+      popMatrix();
     GunMove();
   }
-  //Move
-  void Move(){
-    posX = lerp(posX, mouseX, 0.1);
-  }
-  void GunMove(){
-    translate(gunPosX,gunPosY);
+  void GunMove() {
     float angleToMouse = atan2(mouseY - gunPosY, mouseX - gunPosX);
     theta = angleToMouse;
-    if(theta<=0 && theta >= -4){
+    if(theta <= 0 && theta >= -4){
         
     }
-    if(theta>0 && theta<1.5){
+    if(theta > 0 && theta < 1.5){
       theta = 0;
     }
-    else if(theta>0&& theta<3){
+    else if(theta > 0&& theta<3){
       theta = -3.15;
     }
+  }
+
+  void DrawGun(){
     fill(#055814);
-    rotate(theta);
     beginShape();
+    rotate(theta);
     vertex(14,20);
     vertex(14,-20);
     vertex(80,-20);
     vertex(80,20);
     endShape(CLOSE);
+    
     ellipseMode(CENTER);
     ellipse(0,0,50,50);
   }
-  void GunFire()
-  {
-      Bullet bullet = new Bullet(0, 0, 100,0);
-      bullets.add(bullet);
+  
+  //Move
+  void Move(){
+    posX = lerp(posX, mouseX, 0.1);
   }
-  void UpdateBullet(){
-      for (Bullet bullet : bullets) {
-      bullet.update();
-      bullet.display();
-    }
+  
+  void FireBullet() {
+    float bulletSpeed = 80;  // Adjust the bullet speed as needed
+    float bulletAngle = theta;  // Use the current gun angle as the bullet angle
+    
+    // Calculate the bullet's initial position
+    float bulletX = gunPosX;
+    float bulletY = gunPosY;
+    
+    // Create a new Bullet object with the calculated values
+    Bullet bullet = new Bullet(bulletX, bulletY, bulletSpeed, bulletAngle);
+    
+    // Add the bullet to the bullets list
+    bullets.add(bullet);
   }
 }

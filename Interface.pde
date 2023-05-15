@@ -1,6 +1,5 @@
 class Interfaces
-{
-
+{ 
   void CreateInterface() {
     rectMode(CENTER);
     if (isStart == false) {

@@ -3,12 +3,14 @@ class Enemy{
   float xPos;
   float yPos;
   float speed;
+  float size;
   
   Enemy(float fp, float x){
     firstPos = fp;
     xPos = x;
     yPos = randomPositionY();
     speed = randomSpeed();
+    size = 50;
   }
   
   int randomPositionY(){
@@ -23,7 +25,7 @@ class Enemy{
   
   void displayEnemy(){
     fill(#4467CB);
-    rect(xPos, yPos, 50, 50);
+    rect(xPos, yPos, size, size);
   }
 
   void move(){

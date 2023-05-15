@@ -17,4 +17,11 @@ class Bullet {
     fill(0);
     ellipse(x, y, 20, 20);
   }
+  boolean isOffscreen(){
+    return (this.x < 0 || this.x > width || this.y < 0 || this.y > height);
+  }
+  boolean checkHitEnemy(Enemy enemy) {
+    float distance = dist(x, y, enemy.xPos, enemy.yPos);
+    return distance < enemy.size * 2; // Adjust the collision threshold as needed
+  }
 }

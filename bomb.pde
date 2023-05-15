@@ -15,12 +15,12 @@ class Bomb{
   void drawBomb(){
     //fill(#F50000);
     //ellipse(xPos, yPos, 50, 50);
-    pushMatrix();
     bombImg = loadImage("bomb.png");
-    bombImg.resize(50, 50);
+    pushMatrix();
+    imageMode(CENTER);
     translate(xPos, yPos);
     rotate(angle);
-    image(bombImg,-bombImg.width / 2, -bombImg.height / 2);
+    image(bombImg, 0, 0, 50, 50);
     popMatrix();
   }
   
@@ -30,11 +30,11 @@ class Bomb{
   }
   
   boolean isOffscreen(){
-    return (yPos > height);
+    return (yPos > 700);
   }
   
-  boolean checkHitPlayer(players player){
-    float distance = dist(this.xPos, this.yPos, player.posX, player.posY);
-    return distance < player.size * 300; // Adjust the collision threshold as needed
+  boolean checkHitPlayer(Player player) {
+    float distance = dist(xPos, yPos, player.playerPosX, player.playerPosY);
+    return distance < player.rectSize / 2 + bombImg.width / 5; // Adjust the collision threshold as needed
   }
 }
